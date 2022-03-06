@@ -6,6 +6,15 @@
  *
  */
 public abstract class Stmt {
+    /*
+    data Stmt =
+        Assert Expr
+        | Assign Var Expr
+        | While Expr Stmt
+        | IfStmt Expr Stmt Stmt
+        | Sequence [ Stmt ]
+        deriving (Show, Eq, Read)
+    */
 
     public Stmt() {
 
