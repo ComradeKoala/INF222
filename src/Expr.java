@@ -23,7 +23,7 @@ public abstract class Expr {
     deriving (Show, Eq, Read)
     */
 
-    public Expr(Stmt[] stmts){
+    public Expr(){
 
     }
 
