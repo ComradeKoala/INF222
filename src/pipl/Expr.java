@@ -210,7 +210,7 @@ class Le extends Expr { //less or equal between integers
     private Expr expr1;
     private Expr expr2;
 
-    public Le(Expr expr1, Expr expr) {
+    public Le(Expr expr1, Expr expr2) {
         this.expr1 = expr1;
         this.expr2 = expr2;
     }
