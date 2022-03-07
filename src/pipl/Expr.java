@@ -26,9 +26,7 @@ package pipl;
     deriving (Show, Eq, Read)
 */
 
-public abstract class Expr {
-
-
+public abstract class Expr extends State{
 
     public Expr(){
 
@@ -38,84 +36,125 @@ public abstract class Expr {
 
 class IL extends Expr {
 
-    public IL(int i) {
+    private I value;
 
+    public IL(int i) {
+        this.value = new I(i);
     }
 }
 
 class Plus extends Expr {
 
-    public Plus(Expr ex1, Expr ex2) {
+    private Expr expr1;
+    private Expr expr2;
+
+    public Plus(Expr expr1, Expr expr2) {
+        this.expr1 = expr1;
+        this.expr2= expr2;
 
     }
 }
 
 class Mult extends Expr {
 
-    public Mult(Expr expr1, Expr expr2) {
+    Expr expr1;
+    Expr expr2;
 
+    public Mult(Expr expr1, Expr expr2) {
+        this.expr1 = expr1;
+        this.expr2= expr2;
     }
 }
 
 class Uminus extends Expr {
 
-    public Uminus(Expr  expr) {
+    private Expr expr;
 
+    public Uminus(Expr expr) {
+        this.expr = expr;
     }
 }
 
 class BL extends Expr {
 
+    private Expr expr;
+
     public BL(Expr expr) {
+        this.expr = expr;
 
     }
 }
 
 class Or extends Expr {
 
+    private Expr expr1;
+    private Expr expr2;
+
     public Or(Expr expr1, Expr expr2) {
+        this.expr1 = expr1;
+        this.expr2= expr2;
 
     }
 }
 
 class And extends Expr {
 
-    public And(Expr expr1, Expr expr2) {
+    private Expr expr1;
+    private Expr expr2;
 
+    public And(Expr expr1, Expr expr2) {
+        this.expr1 = expr1;
+        this.expr2 = expr2;
     }
 }
 
 class Not extends Expr {
 
-    public Not(Expr expr) {
+    private Expr expr;
 
+    public Not(Expr expr) {
+        this.expr = expr;
     }
 }
 
 class Choice extends Expr {
 
-    public Choice(Expr expr1, Expr expr2) {
+    private Expr expr1;
+    private Expr expr2;
 
+    public Choice(Expr expr1, Expr expr2) {
+        this.expr1 = expr1;
+        this.expr2 = expr2;
     }
 }
 
 class Equal extends Expr {
 
-    public Equal(Expr expr1, Expr expr2) {
+    private Expr expr1;
+    private Expr expr2;
 
+    public Equal(Expr expr1, Expr expr2) {
+        this.expr1 = expr1;
+        this.expr2= expr2;
     }
 }
 
 class Le extends Expr {
 
-    public Le(Expr expr1, Expr expr) {
+    private Expr expr1;
+    private Expr expr2;
 
+    public Le(Expr expr1, Expr expr) {
+        this.expr1 = expr1;
+        this.expr2 = expr2;
     }
 }
 
 class VarExp extends Expr {
 
-    public VarExp(String expr) {
+    private String s;
 
+    public VarExp(String s) {
+        this.s = s;
     }
 }
