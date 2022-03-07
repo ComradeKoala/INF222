@@ -5,7 +5,7 @@ import java.util.Objects;
 import java.util.Arrays;
 import java.util.HashMap;
 
-import static org.junit.jupiter.api.Assertions.*;
+
 
 // If you have problems setting up JUnit:
 // Remove the import statement and the calls to assertEquals/assertTrue/assertFalse in State.main
@@ -144,43 +144,43 @@ public class State implements Copyable<State> {
 
     /** Unit test for state and values. */
     public static void main(String args[]) throws Exception {
-	System.out.println("main unittestState");
-//	System.out.println(newState());
-	State state = newState();
-	state.addVariable("v1", new I(1));
-	state.addVariable("v2", new L((byte) 4));
-	state.addVariable("v3", new I(9));
-	LocationEnvironment locenv = state.getFreeLocation();
-	State state3 = state.copy();
-//	System.out.println("State3     =" + state3);
-	state.changeValue("v2", new I(25));
-	state.addVariable("v4", new I(19));
-	state.addVariable("v5", new I(93));
-	state.createAlias("v6", "v1");
-	state.changeValue("v6", new I(42));
-	State state3prime = state.copy();
-	state3prime.resetFreeLocation(locenv);
-//	System.out.println("State3     =" + state3);
-//	System.out.println("State3prime=" + state3prime);
-//	System.out.println("State8     =" + state);
-	// Using JUnit assertions
-	assertEquals(new I(42), state.getValue("v1"));
-	assertEquals(new I(25), state.getValue("v2"));
-	assertEquals(new I(9), state.getValue("v3"));
-	assertEquals(new I(19), state.getValue("v4"));
-	assertEquals(new I(93), state.getValue("v5"));
-	assertEquals(new I(42), state.getValue("v6"));
-	assertFalse(state3.isVariable("v6"));
-	assertFalse(state3prime.isVariable("v6"));
-	assertTrue(state.isVariable("v6"));
-	// Using a conditional as in the Haskell version
-	if (new I(42).equals(state.getValue("v1")) && new I(25).equals(state.getValue("v2"))
-		&& new I(9).equals(state.getValue("v3")) && new I(19).equals(state.getValue("v4"))
-		&& new I(93).equals(state.getValue("v5")) && new I(42).equals(state.getValue("v6")))
-	    System.out.println("Unit tests hold");
-	else
-	    System.out.println("Tests failed");
-    }
+        System.out.println("main unittestState");
+    //	System.out.println(newState());
+        State state = newState();
+        state.addVariable("v1", new I(1));
+        state.addVariable("v2", new L((byte) 4));
+        state.addVariable("v3", new I(9));
+        LocationEnvironment locenv = state.getFreeLocation();
+        State state3 = state.copy();
+    //	System.out.println("State3     =" + state3);
+        state.changeValue("v2", new I(25));
+        state.addVariable("v4", new I(19));
+        state.addVariable("v5", new I(93));
+        state.createAlias("v6", "v1");
+        state.changeValue("v6", new I(42));
+        State state3prime = state.copy();
+        state3prime.resetFreeLocation(locenv);
+    //	System.out.println("State3     =" + state3);
+    //	System.out.println("State3prime=" + state3prime);
+    //	System.out.println("State8     =" + state);
+        // Using JUnit assertions
+        //assertEquals(new I(42), state.getValue("v1"));
+        //assertEquals(new I(25), state.getValue("v2"));
+        //assertEquals(new I(9), state.getValue("v3"));
+        //assertEquals(new I(19), state.getValue("v4"));
+        //assertEquals(new I(93), state.getValue("v5"));
+        //assertEquals(new I(42), state.getValue("v6"));
+        //assertFalse(state3.isVariable("v6"));
+        //assertFalse(state3prime.isVariable("v6"));
+        //assertTrue(state.isVariable("v6"));
+        // Using a conditional as in the Haskell version
+        if (new I(42).equals(state.getValue("v1")) && new I(25).equals(state.getValue("v2"))
+            && new I(9).equals(state.getValue("v3")) && new I(19).equals(state.getValue("v4"))
+            && new I(93).equals(state.getValue("v5")) && new I(42).equals(state.getValue("v6")))
+            System.out.println("Unit tests hold");
+        else
+            System.out.println("Tests failed");
+        }
 
 }
 
