@@ -14,6 +14,7 @@ import java.util.Arrays;
  * @since 2022-02-16
  *
  */
+@SuppressWarnings("JavadocReference")
 class Examples {
     /** Euclidean division statement. @see BIPL3AST.hs */
     final static Stmt eucliddiv_stmt = new Sequence(
@@ -69,7 +70,7 @@ class Examples {
 	    eucliddiv_stmt.exec(state);
 	    System.out.printf("q(expected 4) = %s\nr(expected 5) = %s\n", state.getValue("q").show(),
 		    state.getValue("r").show());
-	} catch (AssertError err) {
+	} catch (AssertionError err) {
 	}
 
 	try {
@@ -77,7 +78,7 @@ class Examples {
 	    computus_stmt.exec(state);
 	    System.out.printf("month (expected 3) = %s\nday (expected 23) = %s\n", state.getValue("month").show(),
 		    state.getValue("day").show());
-	} catch (AssertError err) {
+	} catch (AssertionError err) {
 	}
 
     }
