@@ -7,7 +7,6 @@ import java.util.List;
  *
  * @author Jørgen Lohne
  * @since 2022-03-06
- *
  */
 public abstract class Stmt extends State {
     /*
@@ -33,13 +32,12 @@ class Assert extends Stmt {
     }
 
     @Override
-    public State exec(State state)  {
+    public State exec(State state) {
         B b = (B) expr.eval();
 
-        if(b.v0) {
+        if (b.v0) {
             return state;
-        }
-        else {
+        } else {
             System.out.println("Assert failed for " + expr.toString() + " in state" + state.toString());
         }
 
@@ -59,18 +57,18 @@ class Assign extends Stmt {
 
     /**
      * Updates variable if it exists in the store, otherwise adds variable to store.
+     *
      * @param state the state of the store
      * @return the updated state of the store
-     * */
+     */
     @Override
     public State exec(State state) { //
 
         Value val = expr.eval();
 
-        if(isVariable(var)) {
+        if (isVariable(var)) {
             changeValue(var, val);
-        }
-        else {
+        } else {
             addVariable(var, val);
         }
         return state;
@@ -90,6 +88,7 @@ class While extends Stmt {
 
     /**
      * Performs a while loop while condition is met
+     *
      * @param state
      * @return current state
      */
@@ -121,10 +120,9 @@ class IfStmt extends Stmt {
     public State exec(State state) {
         B b = (B) expr.eval();
 
-        if(b.v0) {
+        if (b.v0) {
             stmt1.exec(state);
-        }
-        else {
+        } else {
             stmt2.exec(state);
         }
         return state;
@@ -139,13 +137,15 @@ class Sequence extends Stmt {
         this.stmts = stmts;
     }
 
-    /** Iterates through list of sequences and executes them one by one
+    /**
+     * Iterates through list of sequences and executes them one by one
+     *
      * @param state
      * @return current state
-     * */
+     */
     @Override
     public State exec(State state) {
-        for(int i = 0; i < stmts.size(); i++) {
+        for (int i = 0; i < stmts.size(); i++) {
             Stmt currentStatment = (Stmt) stmts.get(i);
             currentStatment.exec(state);
         }

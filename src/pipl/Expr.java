@@ -5,7 +5,6 @@ package pipl;
  *
  * @author Jørgen Lohne
  * @since 2022-03-06
- *
  */
 
 
@@ -26,9 +25,11 @@ package pipl;
     deriving (Show, Eq, Read)
 */
 
-public abstract class Expr extends State{
+public abstract class Expr extends State {
 
-    public Expr(){}
+    public Expr() {
+    }
+
     public abstract Value eval();
 
 }
@@ -54,7 +55,7 @@ class Plus extends Expr {
 
     public Plus(Expr expr1, Expr expr2) {
         this.expr1 = expr1;
-        this.expr2= expr2;
+        this.expr2 = expr2;
 
     }
 
@@ -73,7 +74,7 @@ class Mult extends Expr {
 
     public Mult(Expr expr1, Expr expr2) {
         this.expr1 = expr1;
-        this.expr2= expr2;
+        this.expr2 = expr2;
     }
 
     @Override
@@ -122,7 +123,7 @@ class Or extends Expr {
 
     public Or(Expr expr1, Expr expr2) {
         this.expr1 = expr1;
-        this.expr2= expr2;
+        this.expr2 = expr2;
     }
 
     @Override
@@ -194,7 +195,7 @@ class Equal extends Expr { //equality between integers
 
     public Equal(Expr expr1, Expr expr2) {
         this.expr1 = expr1;
-        this.expr2= expr2;
+        this.expr2 = expr2;
     }
 
     @Override
