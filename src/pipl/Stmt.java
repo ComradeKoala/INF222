@@ -9,7 +9,7 @@ import java.util.List;
  * @since 2022-03-06
  *
  */
-public abstract class Stmt {
+public abstract class Stmt extends State {
     /*
     data pipl.Stmt =
         Assert pipl.Expr
@@ -20,9 +20,7 @@ public abstract class Stmt {
         deriving (Show, Eq, Read)
     */
 
-    public Stmt() {
-
-    }
+    public abstract State exec(State state);
 
 }
 
@@ -32,6 +30,20 @@ class Assert extends Stmt {
 
     public Assert(Expr expr) {
         this.expr = expr;
+    }
+
+    @Override
+    public State exec(State state)  {
+        B b = (B) expr.eval();
+
+        if(b.v0) {
+            return state;
+        }
+        else {
+            System.out.println("Assert failed for " + expr.toString() + " in state" + state.toString());
+        }
+
+        return null;
     }
 }
 
@@ -44,16 +56,52 @@ class Assign extends Stmt {
         this.var = var;
         this.expr = expr;
     }
+
+    /**
+     * Updates variable if it exists in the store, otherwise adds variable to store.
+     * @param state the state of the store
+     * @return the updated state of the store
+     * */
+    @Override
+    public State exec(State state) { //
+
+        Value val = expr.eval();
+
+        if(isVariable(var)) {
+            changeValue(var, val);
+        }
+        else {
+            addVariable(var, val);
+        }
+        return state;
+    }
 }
 
 class While extends Stmt {
 
-    private Le le;
+    private Expr expr;
     private Sequence sequence;
 
-    public While(Le le, Sequence sequence) {
-        this.le = le;
+    public While(Expr expr, Sequence sequence) {
+        this.expr = expr;
         this.sequence = sequence;
+    }
+
+
+    /**
+     * Performs a while loop while condition is met
+     * @param state
+     * @return current state
+     */
+    @Override
+    public State exec(State state) {
+        B condition = (B) expr.eval();
+
+        while (condition.v0) {
+            sequence.exec(state);
+        }
+
+        return state;
     }
 }
 
@@ -68,13 +116,40 @@ class IfStmt extends Stmt {
         this.stmt1 = stmt1;
         this.stmt2 = stmt2;
     }
+
+    @Override
+    public State exec(State state) {
+        B b = (B) expr.eval();
+
+        if(b.v0) {
+            stmt1.exec(state);
+        }
+        else {
+            stmt2.exec(state);
+        }
+        return state;
+    }
 }
 
 class Sequence extends Stmt {
 
-    private List stmnts;
+    private List stmts;
 
-    public <T> Sequence(List<T> stmnts) {
-        this.stmnts = stmnts;
+    public Sequence(List<Stmt> stmts) {
+        this.stmts = stmts;
+    }
+
+    /** Iterates through list of sequences and executes them one by one
+     * @param state
+     * @return current state
+     * */
+    @Override
+    public State exec(State state) {
+        for(int i = 0; i < stmts.size(); i++) {
+            Stmt currentStatment = (Stmt) stmts.get(i);
+            currentStatment.exec(state);
+        }
+        return state;
+
     }
 }
