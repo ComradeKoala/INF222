@@ -5,6 +5,7 @@ import java.util.Objects;
 import java.util.Arrays;
 import java.util.HashMap;
 
+import static org.junit.jupiter.api.Assertions.*;
 
 
 // If you have problems setting up JUnit:
@@ -164,15 +165,15 @@ public class State implements Copyable<State> {
     //	System.out.println("State3prime=" + state3prime);
     //	System.out.println("State8     =" + state);
         // Using JUnit assertions
-        //assertEquals(new I(42), state.getValue("v1"));
-        //assertEquals(new I(25), state.getValue("v2"));
-        //assertEquals(new I(9), state.getValue("v3"));
-        //assertEquals(new I(19), state.getValue("v4"));
-        //assertEquals(new I(93), state.getValue("v5"));
-        //assertEquals(new I(42), state.getValue("v6"));
-        //assertFalse(state3.isVariable("v6"));
-        //assertFalse(state3prime.isVariable("v6"));
-        //assertTrue(state.isVariable("v6"));
+        assertEquals(new I(42), state.getValue("v1"));
+        assertEquals(new I(25), state.getValue("v2"));
+        assertEquals(new I(9), state.getValue("v3"));
+        assertEquals(new I(19), state.getValue("v4"));
+        assertEquals(new I(93), state.getValue("v5"));
+        assertEquals(new I(42), state.getValue("v6"));
+        assertFalse(state3.isVariable("v6"));
+        assertFalse(state3prime.isVariable("v6"));
+        assertTrue(state.isVariable("v6"));
         // Using a conditional as in the Haskell version
         if (new I(42).equals(state.getValue("v1")) && new I(25).equals(state.getValue("v2"))
             && new I(9).equals(state.getValue("v3")) && new I(19).equals(state.getValue("v4"))
