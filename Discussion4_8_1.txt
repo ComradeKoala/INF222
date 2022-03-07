@@ -1,0 +1,5 @@
+Date: 07.03.2022
+Writen by Jørgen Lohne
+
+Solution to task 4.8.1
+
