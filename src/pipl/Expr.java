@@ -28,18 +28,22 @@ package pipl;
 
 public abstract class Expr extends State{
 
-    public Expr(){
-
-    }
+    public Expr(){}
+    public abstract Value eval();
 
 }
 
-class IL extends Expr {
+class IL extends Expr { //integer literal
 
-    private I value;
+    private int value;
 
     public IL(int i) {
-        this.value = new I(i);
+        this.value = i;
+    }
+
+    @Override
+    public Value eval() {
+        return new I(value);
     }
 }
 
@@ -53,6 +57,13 @@ class Plus extends Expr {
         this.expr2= expr2;
 
     }
+
+    @Override
+    public Value eval() {
+        I val1 = (I) expr1.eval();
+        I val2 = (I) expr2.eval();
+        return new I(val1.v0 + val2.v0);
+    }
 }
 
 class Mult extends Expr {
@@ -64,6 +75,14 @@ class Mult extends Expr {
         this.expr1 = expr1;
         this.expr2= expr2;
     }
+
+    @Override
+    public Value eval() {
+        I val1 = (I) expr1.eval();
+        I val2 = (I) expr2.eval();
+
+        return new I(val1.v0 * val2.v0);
+    }
 }
 
 class Uminus extends Expr {
@@ -73,15 +92,26 @@ class Uminus extends Expr {
     public Uminus(Expr expr) {
         this.expr = expr;
     }
+
+    @Override
+    public Value eval() {
+        I val = (I) expr.eval();
+
+        return new I(-val.v0);
+    }
 }
 
 class BL extends Expr {
 
-    private Expr expr;
+    private Boolean bool;
 
-    public BL(Expr expr) {
-        this.expr = expr;
+    public BL(Boolean b) {
+        this.bool = b;
+    }
 
+    @Override
+    public Value eval() {
+        return new B(bool);
     }
 }
 
@@ -93,7 +123,13 @@ class Or extends Expr {
     public Or(Expr expr1, Expr expr2) {
         this.expr1 = expr1;
         this.expr2= expr2;
+    }
 
+    @Override
+    public Value eval() {
+        B b1 = (B) expr1.eval();
+        B b2 = (B) expr2.eval();
+        return new B(b1.v0 || b2.v0);
     }
 }
 
@@ -106,6 +142,13 @@ class And extends Expr {
         this.expr1 = expr1;
         this.expr2 = expr2;
     }
+
+    @Override
+    public Value eval() {
+        B b1 = (B) expr1.eval();
+        B b2 = (B) expr2.eval();
+        return new B(b1.v0 && b2.v0);
+    }
 }
 
 class Not extends Expr {
@@ -115,20 +158,36 @@ class Not extends Expr {
     public Not(Expr expr) {
         this.expr = expr;
     }
+
+    @Override
+    public Value eval() {
+        B b = (B) expr.eval();
+        return new B(!b.v0);
+    }
 }
 
 class Choice extends Expr {
 
     private Expr expr1;
     private Expr expr2;
+    private Expr expr3;
 
-    public Choice(Expr expr1, Expr expr2) {
-        this.expr1 = expr1;
+    public Choice(Expr expr1, Expr expr2, Expr expr3) {
+        this.expr1 = expr1; //Bool
         this.expr2 = expr2;
+        this.expr3 = expr3;
+    }
+
+    @Override
+    public Value eval() {
+        B b = (B) expr1.eval();
+        Value v1 = expr2.eval();
+        Value v2 = expr3.eval();
+        return b.v0 ? v1 : v2; //if b true return v1 else return v2
     }
 }
 
-class Equal extends Expr {
+class Equal extends Expr { //equality between integers
 
     private Expr expr1;
     private Expr expr2;
@@ -137,9 +196,16 @@ class Equal extends Expr {
         this.expr1 = expr1;
         this.expr2= expr2;
     }
+
+    @Override
+    public Value eval() {
+        I val1 = (I) expr1.eval();
+        I val2 = (I) expr2.eval();
+        return new B(val1.v0.equals(val2.v0));
+    }
 }
 
-class Le extends Expr {
+class Le extends Expr { //less or equal between integers
 
     private Expr expr1;
     private Expr expr2;
@@ -147,6 +213,13 @@ class Le extends Expr {
     public Le(Expr expr1, Expr expr) {
         this.expr1 = expr1;
         this.expr2 = expr2;
+    }
+
+    @Override
+    public Value eval() {
+        I val1 = (I) expr1.eval();
+        I val2 = (I) expr2.eval();
+        return new B(val1.v0 >= val2.v0);
     }
 }
 
@@ -156,5 +229,10 @@ class VarExp extends Expr {
 
     public VarExp(String s) {
         this.s = s;
+    }
+
+    @Override
+    public Value eval() {
+        return getValue(s);
     }
 }
