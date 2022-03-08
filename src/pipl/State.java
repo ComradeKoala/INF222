@@ -141,7 +141,7 @@ interface Copyable<T> {
  * NB! Type location is represented as a Java byte.
  *
  * @author Jørn Lode & Magne Haveraaen
- * @see BIPL3State.hs
+ * @see
  * @since 2022-02-16
  */
 public class State implements Copyable<State> {
