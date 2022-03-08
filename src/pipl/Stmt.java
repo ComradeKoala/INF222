@@ -145,9 +145,9 @@ class Sequence extends Stmt {
      */
     @Override
     public State exec(State state) {
-        for (int i = 0; i < stmts.size(); i++) {
-            Stmt currentStatment = (Stmt) stmts.get(i);
-            currentStatment.exec(state);
+        for (Object stmt : stmts) {
+            Stmt currentStatment = (Stmt) stmt;
+            state = currentStatment.exec(state); //TODO: reasigned state check if work
         }
         return state;
 
