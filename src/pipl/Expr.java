@@ -1,239 +1,187 @@
 package pipl;
 
-/**
- * Solution for task 4.3.1
- *
- * @author Jørgen Lohne
- * @since 2022-03-06
- */
-
-
-/*
-    data pipl.Expr =
-    IL Integer -- integer literal
-    | Plus pipl.Expr pipl.Expr
-    | Mult pipl.Expr pipl.Expr
-    | Uminus pipl.Expr
-    | BL Bool -- boolean literal
-    | Or pipl.Expr pipl.Expr
-    | And pipl.Expr pipl.Expr
-    | Not pipl.Expr
-    | Choice pipl.Expr pipl.Expr pipl.Expr
-    | Equal pipl.Expr pipl.Expr -- equality between integers
-    | Le pipl.Expr pipl.Expr -- less or equal ≤
-    | VarExp Var -- a variable is an expression
-    deriving (Show, Eq, Read)
-*/
-
-public abstract class Expr extends State {
-
+public abstract class Expr {
     public Expr() {
     }
 
-    public abstract Value eval();
-
+    public abstract Value eval(State state);
 }
 
-class IL extends Expr { //integer literal
+class IL extends Expr {
+    private final int value;
 
-    private int value;
-
-    public IL(int i) {
-        this.value = i;
+    public IL(int value) {
+        this.value = value;
     }
 
     @Override
-    public Value eval() {
+    public Value eval(State state) {
         return new I(value);
     }
 }
 
 class Plus extends Expr {
+    private final Expr lhs, rhs;
 
-    private Expr expr1;
-    private Expr expr2;
-
-    public Plus(Expr expr1, Expr expr2) {
-        this.expr1 = expr1;
-        this.expr2 = expr2;
-
+    public Plus(Expr lhs, Expr rhs) {
+        this.lhs = lhs;
+        this.rhs = rhs;
     }
 
     @Override
-    public Value eval() {
-        I val1 = (I) expr1.eval();
-        I val2 = (I) expr2.eval();
-        return new I(val1.v0 + val2.v0);
+    public Value eval(State state) {
+        I i1 = (I) lhs.eval(state);
+        I i2 = (I) rhs.eval(state);
+        return new I(i1.v0 + i2.v0);
     }
 }
 
 class Mult extends Expr {
+    private final Expr lhs, rhs;
 
-    Expr expr1;
-    Expr expr2;
-
-    public Mult(Expr expr1, Expr expr2) {
-        this.expr1 = expr1;
-        this.expr2 = expr2;
+    public Mult(Expr lhs, Expr rhs) {
+        this.lhs = lhs;
+        this.rhs = rhs;
     }
 
     @Override
-    public Value eval() {
-        I val1 = (I) expr1.eval();
-        I val2 = (I) expr2.eval();
-
-        return new I(val1.v0 * val2.v0);
+    public Value eval(State state) {
+        I i1 = (I) lhs.eval(state);
+        I i2 = (I) rhs.eval(state);
+        return new I(i1.v0 * i2.v0);
     }
 }
 
 class Uminus extends Expr {
+    private final Expr value;
 
-    private Expr expr;
-
-    public Uminus(Expr expr) {
-        this.expr = expr;
+    public Uminus(Expr value) {
+        this.value = value;
     }
 
     @Override
-    public Value eval() {
-        I val = (I) expr.eval();
-
-        return new I(-val.v0);
+    public Value eval(State state) {
+        I neg = (I) value.eval(state);
+        return new I(-neg.v0);
     }
 }
 
 class BL extends Expr {
+    private final boolean value;
 
-    private Boolean bool;
-
-    public BL(Boolean b) {
-        this.bool = b;
+    public BL(boolean value) {
+        this.value = value;
     }
 
     @Override
-    public Value eval() {
-        return new B(bool);
+    public Value eval(State state) {
+        return new B(value);
     }
 }
 
 class Or extends Expr {
+    private final Expr lhs, rhs;
 
-    private Expr expr1;
-    private Expr expr2;
-
-    public Or(Expr expr1, Expr expr2) {
-        this.expr1 = expr1;
-        this.expr2 = expr2;
+    public Or(Expr lhs, Expr rhs) {
+        this.lhs = lhs;
+        this.rhs = rhs;
     }
 
     @Override
-    public Value eval() {
-        B b1 = (B) expr1.eval();
-        B b2 = (B) expr2.eval();
+    public Value eval(State state) {
+        B b1 = (B) lhs.eval(state);
+        B b2 = (B) rhs.eval(state);
         return new B(b1.v0 || b2.v0);
     }
 }
 
 class And extends Expr {
+    private final Expr lhs, rhs;
 
-    private Expr expr1;
-    private Expr expr2;
-
-    public And(Expr expr1, Expr expr2) {
-        this.expr1 = expr1;
-        this.expr2 = expr2;
+    public And(Expr lhs, Expr rhs) {
+        this.lhs = lhs;
+        this.rhs = rhs;
     }
 
     @Override
-    public Value eval() {
-        B b1 = (B) expr1.eval();
-        B b2 = (B) expr2.eval();
+    public Value eval(State state) {
+        B b1 = (B) lhs.eval(state);
+        B b2 = (B) rhs.eval(state);
         return new B(b1.v0 && b2.v0);
     }
 }
 
 class Not extends Expr {
-
-    private Expr expr;
+    private final Expr expr;
 
     public Not(Expr expr) {
         this.expr = expr;
     }
 
     @Override
-    public Value eval() {
-        B b = (B) expr.eval();
-        return new B(!b.v0);
+    public Value eval(State state) {
+        B not = (B) expr.eval(state);
+        return new B(!not.v0);
     }
 }
 
 class Choice extends Expr {
+    private final Expr cond, e1, e2;
 
-    private Expr expr1;
-    private Expr expr2;
-    private Expr expr3;
-
-    public Choice(Expr expr1, Expr expr2, Expr expr3) {
-        this.expr1 = expr1; //Bool
-        this.expr2 = expr2;
-        this.expr3 = expr3;
+    public Choice(Expr cond, Expr e1, Expr e2) {
+        this.cond = cond;
+        this.e1 = e1;
+        this.e2 = e2;
     }
 
     @Override
-    public Value eval() {
-        B b = (B) expr1.eval();
-        Value v1 = expr2.eval();
-        Value v2 = expr3.eval();
-        return b.v0 ? v1 : v2; //if b true return v1 else return v2
+    public Value eval(State state) {
+        B condition = (B) cond.eval(state);
+        return condition.v0 ? e1.eval(state) : e2.eval(state);
     }
 }
 
-class Equal extends Expr { //equality between integers
+class Equal extends Expr {
+    private final Expr lhs, rhs;
 
-    private Expr expr1;
-    private Expr expr2;
-
-    public Equal(Expr expr1, Expr expr2) {
-        this.expr1 = expr1;
-        this.expr2 = expr2;
+    public Equal(Expr lhs, Expr rhs) {
+        this.lhs = lhs;
+        this.rhs = rhs;
     }
 
     @Override
-    public Value eval() {
-        I val1 = (I) expr1.eval();
-        I val2 = (I) expr2.eval();
-        return new B(val1.v0.equals(val2.v0));
+    public Value eval(State state) {
+        I i1 = (I) lhs.eval(state);
+        I i2 = (I) rhs.eval(state);
+        return new B(i1.v0.equals(i2.v0));
     }
 }
 
-class Le extends Expr { //less or equal between integers
+class Le extends Expr {
+    private final Expr lhs, rhs;
 
-    private Expr expr1;
-    private Expr expr2;
-
-    public Le(Expr expr1, Expr expr2) {
-        this.expr1 = expr1;
-        this.expr2 = expr2;
+    public Le(Expr lhs, Expr rhs) {
+        this.lhs = lhs;
+        this.rhs = rhs;
     }
 
     @Override
-    public Value eval() {
-        I val1 = (I) expr1.eval();
-        I val2 = (I) expr2.eval();
-        return new B(val1.v0 >= val2.v0);
+    public Value eval(State state) {
+        I i1 = (I) lhs.eval(state);
+        I i2 = (I) rhs.eval(state);
+        return new B(i1.v0 <= i2.v0);
     }
 }
 
 class VarExp extends Expr {
+    private final String name;
 
-    private String s;
-
-    public VarExp(String s) {
-        this.s = s;
+    public VarExp(String name) {
+        this.name = name;
     }
 
     @Override
-    public Value eval() {
-        return getValue(s);
+    public Value eval(State state) {
+        return state.getValue(name);
     }
 }
