@@ -1,3 +1,11 @@
+/**
+ * Solution for tasks 4.3.1 together with:
+ * @see pipl.Stmt
+ * Also solution for task 4.8.1 1 & 2
+ * @author: Jørgen Lohne
+ * @since 2022-03-06
+ * */
+
 package pipl;
 
 public abstract class Expr {
@@ -183,5 +191,37 @@ class VarExp extends Expr {
     @Override
     public Value eval(State state) {
         return state.getValue(name);
+    }
+}
+
+class IntDiv extends Expr { //Integer division
+    private final Expr lhs, rhs;
+
+    public IntDiv(Expr lhs, Expr rhs) {
+        this.lhs = lhs;
+        this.rhs = rhs;
+    }
+
+    @Override
+    public Value eval(State state) {
+        I i1 = (I) lhs.eval(state);
+        I i2 = (I) rhs.eval(state);
+        return new I(i1.v0 / i2.v0);
+    }
+}
+
+class Mod extends Expr { //Modulus
+    private final Expr lhs, rhs;
+
+    public Mod(Expr lhs, Expr rhs) {
+        this.lhs = lhs;
+        this.rhs = rhs;
+    }
+
+    @Override
+    public Value eval(State state) {
+        I i1 = (I) lhs.eval(state);
+        I i2 = (I) rhs.eval(state);
+        return new I(i1.v0 % i2.v0);
     }
 }
