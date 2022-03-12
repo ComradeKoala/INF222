@@ -1,5 +1,20 @@
 Date: 07.03.2022
-Writen by Jørgen Lohne
+Written by Jørgen Lohne
 
-Solution to task 4.8.1
+Solution to task 4.8.1 3
 
+Implementing Integer division and modulus into PIPL with java as the metalanguage felt very straight forward after
+having created a foundation of how to implement language features in task 4.8.1.
+
+Having to create classes for each language feature can be argued to be somewhat cumbersome, however in my opinion it
+does make the code very legible and thus easier to maintain or extend. In the case that another developer was
+collaborating with me and wanted to extend the PIPL language, I imagine it would be quite easy for them to understand
+how to do so.
+
+Although I did not solve the previous tasks in Haskell i imagine that my java solution requires more boilerplate code
+than a solution in Haskell would have. However as the tasks for PIPL are small in scope (compared to a modern full-
+featured programing language) I believe this becomes negligible. Especially so taking into account my personal comfort
+writing code in a Java object oriented way compared to Haskell's syntax and functional paradigm.
+
+In conclusion I feel that I personally have likely benefited from implementing new features to PIPL in java compared to
+Haskell when taking into account personal preference.
