@@ -1,9 +1,6 @@
 package pipl;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -311,6 +308,35 @@ public class State implements Copyable<State> {
     public State copy() {
         return new State(this.environment.copy(), this.store.copy());
     }
+
+
+
+    /////////////////////////////////////////////////////////
+    /////////////////////////////////////////////////////////
+    ///////////////////// Procedures ////////////////////////
+    /////////////////////////////////////////////////////////
+    /////////////////////////////////////////////////////////
+
+
+    public State perform(State state) {
+        return null; //TODO
+    }
+
+
+    public List<Value> run(List<Value> values) {
+        /* Running a procedure:
+        * Initialise a new state with the input parameters initialised from the value list
+        * Perform the procedure in this state
+        * Extract the output values from the return state
+        * */
+
+        return null; //TODO
+
+
+    }
+
+
+
 
 }
 

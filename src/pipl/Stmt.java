@@ -1,3 +1,10 @@
+/**
+ * Solution for tasks 4.3.1 together with
+ * @see pipl.Expr
+ * @author: Jørgen Lohne
+ * @since 2022-03-06
+ * */
+
 package pipl;
 
 import java.util.List;
