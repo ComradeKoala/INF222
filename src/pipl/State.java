@@ -310,7 +310,6 @@ public class State implements Copyable<State> {
     }
 
 
-
     /////////////////////////////////////////////////////////
     /////////////////////////////////////////////////////////
     ///////////////////// Procedures ////////////////////////
@@ -318,25 +317,45 @@ public class State implements Copyable<State> {
     /////////////////////////////////////////////////////////
 
 
-    public State perform(State state) {
-        return null; //TODO
+    // Runs procedure and updates state
+    private State perform(ProcedureDeclaration procedureDeclaration) {
+
+        //assuming that the parameter variables are already defined in state
+        State prevState = this.copy();//prevState so that local variables are removed later
+
+        addCallStateInputs(procedureDeclaration.getParameters(), Arrays.asList(new U()), this); //add all local variables to the state
+        procedureDeclaration.getStmt().exec(this);  // execute the body of the procedure
+
+        return prevState; // remove local variables from state
     }
 
-
-    public List<Value> run(List<Value> values) {
-        /* Running a procedure:
-        * Initialise a new state with the input parameters initialised from the value list
-        * Perform the procedure in this state
-        * Extract the output values from the return state
-        * */
-
-        return null; //TODO
-
-
+    // Adds procedure inputs to state
+    private static State addCallStateInputs(List<Parameter> parameters, List<Value> values, State state) {
+        for (int i = 0; i < parameters.size(); i++){
+            state.addVariable(parameters.get(i).getVarDecl().getVar().getVar(), values.get(i));
+        }
+        return state;
     }
 
+    // Returns procedure inputs from state
+    private List<Value> getReturnStateOutputs(List<Parameter> parameters, State state) {
+        List<Value> values = new ArrayList();
 
+        for(Parameter parameter : parameters) {
+            values.add(state.getValue(parameter.getVarDecl().getVar().getVar()));
+        }
+        return values;
+    }
 
+    // Free function that creates new state and runs procedure
+    public List<Value> run(ProcedureDeclaration procedureDeclaration, List<Value> values) {
+        State state = new State();
+        addCallStateInputs(procedureDeclaration.getParameters(), values, state);
+        State stateAfterPerform = perform(procedureDeclaration);
+        List<Value> returnValues = getReturnStateOutputs(procedureDeclaration.getParameters() ,stateAfterPerform);
+
+        return returnValues;
+    }
 
 }
 

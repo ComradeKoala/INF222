@@ -23,14 +23,13 @@ class Assert extends Stmt {
         this.expr = expr;
     }
 
-    @Override
-    public State exec(State state) {
+    public State exec(State state)  {
         B cond = (B) expr.eval(state);
         if (cond.v0)
             return state;
 
-        System.out.println("Assert failed for " + expr.toString() + "in state" + state.toString());
-        return null;
+        throw new Error("Assert failed for " + expr.toString() + "in state" + state.toString());
+
     }
 }
 

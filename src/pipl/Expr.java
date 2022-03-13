@@ -188,6 +188,10 @@ class VarExp extends Expr {
         this.name = name;
     }
 
+    public String getName() {
+        return name;
+    }
+
     @Override
     public Value eval(State state) {
         return state.getValue(name);
