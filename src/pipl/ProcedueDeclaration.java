@@ -1,8 +1,9 @@
 /**
  * Also solution for task 4.4.6
+ *
  * @author: Jørgen Lohne
  * @since 2022-03-06
- * */
+ */
 
 package pipl;
 
@@ -38,41 +39,40 @@ class ProcedureDeclaration {
         return stmt;
     }
 
-    public static List<Integer> eucliddiv(int x, int y){
+    public static List<Integer> eucliddiv_proc(int x, int y) {
         List<Parameter> parameters = new ArrayList<>();
         List<VarDecl> varDecls = new ArrayList<>();
 
         parameters.add(new Parameter(Mode.OBS, new VarDecl(new Var("x"), Type.INTEGERTYPE)));
         parameters.add(new Parameter(Mode.OBS, new VarDecl(new Var("y"), Type.INTEGERTYPE)));
-        parameters.add(new Parameter(Mode.OBS, new VarDecl(new Var("q"), Type.INTEGERTYPE)));
-        parameters.add(new Parameter(Mode.OBS, new VarDecl(new Var("r"), Type.INTEGERTYPE)));
+        parameters.add(new Parameter(Mode.OUT, new VarDecl(new Var("q"), Type.INTEGERTYPE)));
+        parameters.add(new Parameter(Mode.OUT, new VarDecl(new Var("r"), Type.INTEGERTYPE)));
+
 
         State state = new State();
         List<Value> values = new ArrayList<>();
         values.add(new I(x));
         values.add(new I(y));
 
+        ProcedureDeclaration eucliddiv = new ProcedureDeclaration("eucliddiv", parameters, varDecls, Examples.eucliddiv_stmt, new State());
 
-        ProcedureDeclaration eucliddiv_proc = new ProcedureDeclaration("eucliddiv", parameters, varDecls, Examples.eucliddiv_stmt, new State());
-
-        List<Value> returnValues =  state.run(eucliddiv_proc, values);
+        List<Value> returnValues = state.run(eucliddiv, values);
 
         //convert return values to java ints
 
-        IL r = (IL) returnValues.get(0);
-        IL q = (IL) returnValues.get(1);
-        int qInt = q.getValue();
-        int rInt = r.getValue();
+        I r = (I) returnValues.get(1);
+        I q = (I) returnValues.get(0);
+        int qInt = q.v0;
+        int rInt = r.v0;
 
         List<Integer> rList = new ArrayList<>();
         rList.add(qInt);
         rList.add(rInt);
         return rList;
-
     }
 
     public static void main(String[] args) {
-        System.out.println(eucliddiv(10, 3));
+        System.out.println(eucliddiv_proc(10, 3));
     }
 
 }

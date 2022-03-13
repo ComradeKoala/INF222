@@ -321,18 +321,31 @@ public class State implements Copyable<State> {
     private State perform(ProcedureDeclaration procedureDeclaration) {
 
         //assuming that the parameter variables are already defined in state
-        State prevState = this.copy();//prevState so that local variables are removed later
+        State prevState = this.copy();
 
-        addCallStateInputs(procedureDeclaration.getParameters(), Arrays.asList(new U()), this); //add all local variables to the state
-        procedureDeclaration.getStmt().exec(this);  // execute the body of the procedure
+        //addCallStateInputs(procedureDeclaration.getParameters(), Arrays.asList(new U()), this); //add all local variables to the state
+        State newState = procedureDeclaration.getStmt().exec(this);  // execute the body of the procedure
+
+        for (Parameter parameter : procedureDeclaration.getParameters()) {
+            if (parameter.getMode() == Mode.OUT || parameter.getMode() == Mode.UPD) {
+                prevState.addVariable(parameter.getVarDecl().getVar().getVar(), getValue(parameter.getVarDecl().getVar().getVar()));
+            }
+        }
 
         return prevState; // remove local variables from state
     }
 
     // Adds procedure inputs to state
     private static State addCallStateInputs(List<Parameter> parameters, List<Value> values, State state) {
-        for (int i = 0; i < parameters.size(); i++){
-            state.addVariable(parameters.get(i).getVarDecl().getVar().getVar(), values.get(i));
+
+        int valIdx = 0;
+        for (Parameter p : parameters) {
+            if (p.getMode() == Mode.OUT)
+                state.addVariable(p.getVarDecl().getVar().getVar(), new U());
+            else {
+                state.addVariable(p.getVarDecl().getVar().getVar(), values.get(valIdx));
+                valIdx++;
+            }
         }
         return state;
     }
@@ -341,8 +354,9 @@ public class State implements Copyable<State> {
     private List<Value> getReturnStateOutputs(List<Parameter> parameters, State state) {
         List<Value> values = new ArrayList();
 
-        for(Parameter parameter : parameters) {
-            values.add(state.getValue(parameter.getVarDecl().getVar().getVar()));
+        for (Parameter parameter : parameters) {
+            if (parameter.getMode() != Mode.OBS)
+                values.add(state.getValue(parameter.getVarDecl().getVar().getVar()));
         }
         return values;
     }
@@ -351,8 +365,8 @@ public class State implements Copyable<State> {
     public List<Value> run(ProcedureDeclaration procedureDeclaration, List<Value> values) {
         State state = new State();
         addCallStateInputs(procedureDeclaration.getParameters(), values, state);
-        State stateAfterPerform = perform(procedureDeclaration);
-        List<Value> returnValues = getReturnStateOutputs(procedureDeclaration.getParameters() ,stateAfterPerform);
+        State stateAfterPerform = state.perform(procedureDeclaration);
+        List<Value> returnValues = getReturnStateOutputs(procedureDeclaration.getParameters(), stateAfterPerform);
 
         return returnValues;
     }

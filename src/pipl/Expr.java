@@ -1,10 +1,11 @@
 /**
  * Solution for tasks 4.3.1 together with:
+ *
+ * @author: Jørgen Lohne
  * @see pipl.Stmt
  * Also solution for task 4.8.1 1 & 2
- * @author: Jørgen Lohne
  * @since 2022-03-06
- * */
+ */
 
 package pipl;
 

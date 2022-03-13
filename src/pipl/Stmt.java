@@ -1,9 +1,10 @@
 /**
  * Solution for tasks 4.3.1 together with
- * @see pipl.Expr
+ *
  * @author: Jørgen Lohne
+ * @see pipl.Expr
  * @since 2022-03-06
- * */
+ */
 
 package pipl;
 
@@ -23,7 +24,7 @@ class Assert extends Stmt {
         this.expr = expr;
     }
 
-    public State exec(State state)  {
+    public State exec(State state) {
         B cond = (B) expr.eval(state);
         if (cond.v0)
             return state;

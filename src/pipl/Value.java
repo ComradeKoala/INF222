@@ -30,8 +30,6 @@ class U implements Value {
     U() {
     }
 
-    ;
-
     @Override
     public String show() {
         return toString();
