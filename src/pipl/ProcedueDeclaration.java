@@ -38,7 +38,7 @@ class ProcedureDeclaration {
         return stmt;
     }
 
-    public static void main(String[] args) {
+    public static List<Integer> eucliddiv(int x, int y){
         List<Parameter> parameters = new ArrayList<>();
         List<VarDecl> varDecls = new ArrayList<>();
 
@@ -47,14 +47,32 @@ class ProcedureDeclaration {
         parameters.add(new Parameter(Mode.OBS, new VarDecl(new Var("q"), Type.INTEGERTYPE)));
         parameters.add(new Parameter(Mode.OBS, new VarDecl(new Var("r"), Type.INTEGERTYPE)));
 
-        ProcedureDeclaration eucliddiv_proc = new ProcedureDeclaration("eucliddiv", parameters, varDecls, Examples.eucliddiv_stmt, new State());
-
         State state = new State();
         List<Value> values = new ArrayList<>();
-        values.add(new I(10));
-        values.add(new I(3));
+        values.add(new I(x));
+        values.add(new I(y));
 
-        System.out.println(state.run(eucliddiv_proc, values));
+
+        ProcedureDeclaration eucliddiv_proc = new ProcedureDeclaration("eucliddiv", parameters, varDecls, Examples.eucliddiv_stmt, new State());
+
+        List<Value> returnValues =  state.run(eucliddiv_proc, values);
+
+        //convert return values to java ints
+
+        IL r = (IL) returnValues.get(0);
+        IL q = (IL) returnValues.get(1);
+        int qInt = q.getValue();
+        int rInt = r.getValue();
+
+        List<Integer> rList = new ArrayList<>();
+        rList.add(qInt);
+        rList.add(rInt);
+        return rList;
+
+    }
+
+    public static void main(String[] args) {
+        System.out.println(eucliddiv(10, 3));
     }
 
 }

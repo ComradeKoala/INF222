@@ -22,6 +22,10 @@ class IL extends Expr {
         this.value = value;
     }
 
+    public int getValue() {
+        return value;
+    }
+
     @Override
     public Value eval(State state) {
         return new I(value);
